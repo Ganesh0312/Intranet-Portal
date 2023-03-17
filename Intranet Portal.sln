@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntranetPortal", "IntranetPortal.csproj", "{A483017D-E8D3-40C8-8D74-CD1F50874B78}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A483017D-E8D3-40C8-8D74-CD1F50874B78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A483017D-E8D3-40C8-8D74-CD1F50874B78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A483017D-E8D3-40C8-8D74-CD1F50874B78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A483017D-E8D3-40C8-8D74-CD1F50874B78}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8E63EA58-A460-48B0-9FB5-3D88B10FA629}
+	EndGlobalSection
+EndGlobal
