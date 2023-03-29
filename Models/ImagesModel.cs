@@ -7,9 +7,10 @@ namespace IntranetPortal.Models
     {
         [Key]
         public int ID { get; set; }
-        public string ImageName { get; set; }
+        public string? ImageName { get; set; }
         [NotMapped]
-        public IFormFile Image { get; set; }
+        public IFormFile ImageFile { get; set; }
+        [NotMapped]
         public string? Imagesrc { get; set; }
 
     }

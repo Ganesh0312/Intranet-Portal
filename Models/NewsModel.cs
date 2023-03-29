@@ -6,16 +6,17 @@ namespace IntranetPortal.Models
     public class NewsModel
     {
         [Key]
-        public int Id { get; set; }
+        public int newsId { get; set; }
 
-        public string Title { get; set; }
+        public string newsTitale { get; set; }
 
-        public DateTime NewsDate { get; set; }
+        public String content { get; set; }
 
-        public string News { get; set; }
+        public string? imageName { get; set; }
         [NotMapped]
-        public IFormFile? Image { get; set; }
-        public string? Imagesrc { get; set; }
+        public IFormFile imageFile { get; set; }
+        [NotMapped]
+        public string? imageUrl { get; set; }
 
     }
 }

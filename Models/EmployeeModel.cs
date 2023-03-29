@@ -1,33 +1,41 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace IntranetPortal.Models
 {
     public class EmployeeModel
     {
         [Key]
-        public int ID { get; set; }
+        public int employeesID { get; set; }
 
-        [Required]
-        public string? Name { get; set; }
-        public string? Age { get; set; }
-        [Required]
-        public string Phone { get; set; }
-        [Required]
-        public string Mail { get; set; }
+        [Column(TypeName ="nvarchar(50)")]
+        public string employeeName { get; set; }
 
-        public string DOB { get; set; }
+        [Column(TypeName = "nvarchar(50)")]
+        public string occupation { get; set; }
 
-        public string JoiningDate { get; set; }
+        public string mail { get; set; }
+        public string mobile { get; set; }
+        public string dob { get; set; }
+        public string dateOfJoin { get; set; }
+        public string department { get; set; }
+        public string designation { get; set; }
         
-        public string Designation { get; set; }
+
+        [Column(TypeName = "nvarchar(100)")]
+        public string? imageName { get; set; }
+
+        [NotMapped]
+        public IFormFile imageFile { get; set; }
+
+        [NotMapped]
+        public string? imageSrc { get; set; }
+
         
-        public string Department { get; set; }
-        public string Password { get; set; }
-        public int IsActive { get; set; }
+
+        //Pascal(EmployeeName) -> Camel EmployeeID ->employeeID
+        //Camel(employeeName) -> Pascal
     }
-
-    
-
-   
 }

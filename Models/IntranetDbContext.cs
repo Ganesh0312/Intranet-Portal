@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using IntranetPortal.Models;
 
 namespace IntranetPortal.Models
 {
@@ -8,7 +9,7 @@ namespace IntranetPortal.Models
         {
             
         }
-        public DbSet<EmployeeModel> Employees { get; set; }
+        public DbSet<EmployeeModel> EmployeesModel { get; set; }
 
         public DbSet<DepartmentModel> Departments { get; set; }
 
@@ -16,11 +17,13 @@ namespace IntranetPortal.Models
 
         public DbSet<ImagesModel> Images { get; set; }
 
-       // public DbSet<DocumentModel> Documents { get; set; }
+        public DbSet<DocumentModel> Documents { get; set; }
 
-        public DbSet<NewsModel> News { get; set; }
+        public DbSet<NewsModel> NewsModels { get; set; }
 
         public DbSet<MotivationModel> Motivations { get; set; }
+
+        
 
     }
 }

@@ -56,55 +56,69 @@ namespace Intranet_Portal.Migrations
                     b.ToTable("Designations");
                 });
 
-            modelBuilder.Entity("IntranetPortal.Models.EmployeeModel", b =>
+            modelBuilder.Entity("IntranetPortal.Models.DocumentModel", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("DocID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DocID"));
 
-                    b.Property<string>("Age")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DOB")
+                    b.Property<string>("DocName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Department")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("DocID");
 
-                    b.Property<string>("Designation")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.ToTable("Documents");
+                });
 
-                    b.Property<int>("IsActive")
+            modelBuilder.Entity("IntranetPortal.Models.EmployeeModel", b =>
+                {
+                    b.Property<int>("employeesID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("JoiningDate")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("employeesID"));
+
+                    b.Property<string>("dateOfJoin")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Mail")
+                    b.Property<string>("department")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("designation")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("dob")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Phone")
+                    b.Property<string>("employeeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("imageName")
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("mail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ID");
+                    b.Property<string>("mobile")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("Employees");
+                    b.Property<string>("occupation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("employeesID");
+
+                    b.ToTable("EmployeesModel");
                 });
 
             modelBuilder.Entity("IntranetPortal.Models.ImagesModel", b =>
@@ -116,11 +130,6 @@ namespace Intranet_Portal.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
                     b.Property<string>("ImageName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Imagesrc")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
@@ -150,29 +159,26 @@ namespace Intranet_Portal.Migrations
 
             modelBuilder.Entity("IntranetPortal.Models.NewsModel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("newsId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("newsId"));
 
-                    b.Property<string>("Imagesrc")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("News")
+                    b.Property<string>("content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("NewsDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("imageName")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("newsTitale")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("newsId");
 
-                    b.ToTable("News");
+                    b.ToTable("NewsModels");
                 });
 #pragma warning restore 612, 618
         }

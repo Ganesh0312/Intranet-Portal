@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using IntranetPortal.Models;
 
 namespace IntranetPortal.Controllers
@@ -14,49 +15,62 @@ namespace IntranetPortal.Controllers
     public class NewsController : ControllerBase
     {
         private readonly IntranetDbContext _context;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public NewsController(IntranetDbContext context)
+        public NewsController(IntranetDbContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            _hostEnvironment = hostEnvironment;
         }
 
-        // GET: api/News
         [HttpGet]
         public async Task<ActionResult<IEnumerable<NewsModel>>> GetNews()
         {
-          if (_context.News == null)
-          {
-              return NotFound();
-          }
-            return await _context.News.ToListAsync();
+            return await _context.NewsModels.Select(x => new NewsModel
+            {
+                newsId = x.newsId,
+                newsTitale =x.newsTitale,
+                content = x.content,
+                imageName = x.imageName,
+                imageUrl = String.Format("{0}://{1}{2}/NewsImage/{3}", Request.Scheme, Request.Host, Request.PathBase, x.imageName)
+
+            }).ToListAsync();
         }
 
-       /* // GET: api/News/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<NewsModel>> GetNewsModel(int id)
+        public async Task<ActionResult<NewsModel>> GetNewsById(int id)
         {
-          if (_context.News == null)
-          {
-              return NotFound();
-          }
-            var newsModel = await _context.News.FindAsync(id);
-
-            if (newsModel == null)
+            var newsModel =await _context.NewsModels.FindAsync(id);
+            if(newsModel == null)
             {
-                return NotFound();
+               return NotFound();
             }
-
             return newsModel;
         }
 
-        // PUT: api/News/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutNewsModel(int id, NewsModel newsModel)
+        [HttpPost]
+        public async Task<ActionResult<NewsModel>> AddNews([FromForm] NewsModel newsModel)
         {
-            if (id != newsModel.Id)
+            newsModel.imageName = await SaveImage(newsModel.imageFile);
+            _context.NewsModels.Add(newsModel);
+            await _context.SaveChangesAsync();
+
+            return Ok(newsModel);
+
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<NewsModel>> EditNews(int id, [FromForm] NewsModel newsModel)
+        {
+            if(id !=newsModel.newsId)
             {
                 return BadRequest();
+            }
+
+            if(newsModel.imageName == null)
+            {
+                DeleteImage(newsModel.imageName);
+                newsModel.imageName = await SaveImage(newsModel.imageFile);
             }
 
             _context.Entry(newsModel).State = EntityState.Modified;
@@ -65,7 +79,7 @@ namespace IntranetPortal.Controllers
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch(DbUpdateConcurrencyException)
             {
                 if (!NewsModelExists(id))
                 {
@@ -76,60 +90,63 @@ namespace IntranetPortal.Controllers
                     throw;
                 }
             }
+            return Ok(newsModel);
+            
+        }
 
-            return NoContent();
-        }*/
-
-    
-        [HttpPost]
-        public async Task<ActionResult<NewsModel>> PostNewsModel([FromForm]NewsModel newsModel)
+        [HttpDelete()]
+        public async Task<ActionResult<NewsModel>> DeleteNews(int id)
         {
-          if (_context.News == null)
-          {
-              return Problem("Entity set 'IntranetDbContext.News'  is null.");
-          }
-            newsModel.Imagesrc = await UploadImage(newsModel.Image);
-            _context.News.Add(newsModel);
+            var newsmodel = await _context.NewsModels.FindAsync(id);
+            if (newsmodel == null)
+            {
+                return BadRequest();
+            }
+            DeleteImage(newsmodel.imageName);
+             _context.NewsModels.Remove(newsmodel);
             await _context.SaveChangesAsync();
+            return Ok(newsmodel);
+        } 
 
-            return CreatedAtAction(nameof(GetNews), new { id = newsModel.Id }, newsModel);
+
+
+
+        private bool NewsModelExists(int id)
+        {
+            return _context.NewsModels.Any(e => e.newsId == id);
         }
 
         [NonAction]
-        public async Task<string> UploadImage(IFormFile file)
+        public async Task<string> SaveImage(IFormFile imageFile)
         {
-            var special = Guid.NewGuid().ToString();
-            var filepath = Path.Combine(Directory.GetCurrentDirectory(), @"Images", special + "-" + file.FileName);
-            using (FileStream ms = new FileStream(filepath, FileMode.Create))
+            string imageName = new String(Path.GetFileNameWithoutExtension(imageFile.FileName).Take(10).ToArray()).Replace(' ', '-');
+            imageName = imageName + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(imageFile.FileName);
+            var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, "NewsImage", imageName);
+            using (var fileStream = new FileStream(imagePath, FileMode.Create))
             {
-                await file.CopyToAsync(ms);
+                await imageFile.CopyToAsync(fileStream);
             }
-            var filename = special + "-" + file.FileName;
-            return filepath;
+            return imageName;
         }
+        /* [NonAction]
+         public async Task<string> UploadImage(IFormFile file)
+         {
+             var special = Guid.NewGuid().ToString();
+             var filepath = Path.Combine(_hostEnvironment.ContentRootPath, @"NewsImage", special + "-" + file.FileName);
+             using (FileStream ms = new FileStream(filepath, FileMode.Create))
+             {
+                 await file.CopyToAsync(ms);
+             }
+            // var filename = special + "-" + file.FileName;
+             return filepath;
+         }*/
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteNewsModel(int id)
+        [NonAction]
+        public void DeleteImage(string imageName)
         {
-            if (_context.News == null)
-            {
-                return NotFound();
-            }
-            var newsModel = await _context.News.FindAsync(id);
-            if (newsModel == null)
-            {
-                return NotFound();
-            }
-
-            _context.News.Remove(newsModel);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, "NewsImage", imageName);
+            if (System.IO.File.Exists(imagePath))
+                System.IO.File.Delete(imagePath);
         }
-
-       /* private bool NewsModelExists(int id)
-        {
-            return (_context.News?.Any(e => e.Id == id)).GetValueOrDefault();
-        }*/
     }
 }
