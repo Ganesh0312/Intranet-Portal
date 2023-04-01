@@ -119,6 +119,8 @@ namespace IntranetPortal.Controllers
             _context.EmployeesModel.Remove(employeeModel);
             await _context.SaveChangesAsync();
 
+
+
             return employeeModel;
         }
 
