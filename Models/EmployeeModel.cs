@@ -23,6 +23,7 @@ namespace IntranetPortal.Models
         public string department { get; set; }
         public string designation { get; set; }
         
+        public string password { get; set; }
 
         [Column(TypeName = "nvarchar(100)")]
         public string? imageName { get; set; }

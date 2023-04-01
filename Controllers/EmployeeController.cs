@@ -32,6 +32,7 @@ namespace IntranetPortal.Controllers
                     mail = x.mail,
                     mobile = x.mobile,
                     dob = x.dob,
+                    password = x.password,
                     dateOfJoin = x.dateOfJoin,
                     department = x.department,
                     designation = x.designation,
