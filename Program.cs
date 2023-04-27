@@ -23,13 +23,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(builder =>
-{
-    builder
-    .AllowAnyOrigin()
-    .AllowAnyMethod()
-    .AllowAnyHeader();
-});
+app.UseCors(x => x
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials());
 
 app.UseStaticFiles(new StaticFileOptions
 {
@@ -45,6 +43,11 @@ app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Documents")),
     RequestPath = "/Documents"
+});
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Strories")),
+    RequestPath = "/Strories"
 });
 app.UseHttpsRedirection();
 

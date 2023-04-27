@@ -41,27 +41,7 @@ namespace IntranetPortal.Controllers
                 }).ToListAsync();
         }
 
-        // GET: api/Images/5
-       /* [HttpGet("{id}")]
-        public async Task<ActionResult<ImagesModel>> GetImagesModel(int id)
-        {
-          if (_context.Images == null)
-          {
-              return NotFound();
-          }
-            var imagesModel = await _context.Images.FindAsync(id);
-
-            if (imagesModel == null)
-            {
-                return NotFound();
-            }
-
-            return imagesModel;
-        }
-        // POST: api/Images
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754 */
-
-
+        
        
         [HttpPost]
         public async Task<ActionResult<ImagesModel>> PostImagesModel([FromForm]ImagesModel imagesModel)

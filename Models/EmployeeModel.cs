@@ -12,18 +12,14 @@ namespace IntranetPortal.Models
 
         [Column(TypeName ="nvarchar(50)")]
         public string employeeName { get; set; }
-
-        [Column(TypeName = "nvarchar(50)")]
-        public string occupation { get; set; }
-
         public string mail { get; set; }
         public string mobile { get; set; }
-        public string dob { get; set; }
+        public string dob { get; set; } 
         public string dateOfJoin { get; set; }
         public string department { get; set; }
         public string designation { get; set; }
-        
         public string password { get; set; }
+        public bool IsActive { get; set; }
 
         [Column(TypeName = "nvarchar(100)")]
         public string? imageName { get; set; }
@@ -33,10 +29,5 @@ namespace IntranetPortal.Models
 
         [NotMapped]
         public string? imageSrc { get; set; }
-
-        
-
-        //Pascal(EmployeeName) -> Camel EmployeeID ->employeeID
-        //Camel(employeeName) -> Pascal
     }
 }

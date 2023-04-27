@@ -25,6 +25,7 @@
   <ItemGroup>
     <Folder Include="Images\" />
     <Folder Include="Documents\" />
+    <Folder Include="Strories\" />
     <Folder Include="NewsImage\" />
   </ItemGroup>
 

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using IntranetPortal.Models;
+using Intranet_Portal.Models;
 
 namespace IntranetPortal.Controllers
 {
@@ -18,7 +19,7 @@ namespace IntranetPortal.Controllers
             this._hostEnvironment = hostEnvironment;
         }
 
-        // GET: api/Employee
+       
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EmployeeModel>>> GetEmployees()
         {
@@ -27,7 +28,6 @@ namespace IntranetPortal.Controllers
                 {
                     employeesID = x.employeesID,
                     employeeName = x.employeeName,
-                    occupation = x.occupation,
                     imageName = x.imageName,
                     mail = x.mail,
                     mobile = x.mobile,
@@ -35,13 +35,13 @@ namespace IntranetPortal.Controllers
                     password = x.password,
                     dateOfJoin = x.dateOfJoin,
                     department = x.department,
+                    IsActive =x.IsActive,
                     designation = x.designation,
                     imageSrc = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, x.imageName)
                 })
                 .ToListAsync();
         }
 
-        // GET: api/Employee/5
         [HttpGet("{id}")]
         public async Task<ActionResult<EmployeeModel>> GetEmployeeModel(int id)
         {
@@ -49,21 +49,19 @@ namespace IntranetPortal.Controllers
 
             if (employeeModel == null)
             {
-                return NotFound();
+                return NotFound(new { Message = "Employee not Found" });
             }
 
             return employeeModel;
         }
 
-        // PUT: api/Employee/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        
         [HttpPut("{id}")]
         public async Task<IActionResult> PutEmployeeModel(int id, [FromForm] EmployeeModel employeeModel)
         {
             if (id != employeeModel.employeesID)
             {
-                return BadRequest();
+                return BadRequest(new { Message = "Put id Or EmoployeeModel Id Not match" });
             }
 
             if (employeeModel.imageFile != null)
@@ -93,17 +91,20 @@ namespace IntranetPortal.Controllers
             return NoContent();
         }
 
-        // POST: api/Employee
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        
         [HttpPost]
         public async Task<ActionResult<EmployeeModel>> PostEmployeeModel([FromForm] EmployeeModel employeeModel)
         {
+            if (await _context.EmployeesModel.AnyAsync(e => e.mail == employeeModel.mail))
+            {
+                return Ok(new { Message = "Employee Allready Exist" });
+            }
+
             employeeModel.imageName = await SaveImage(employeeModel.imageFile);
             _context.EmployeesModel.Add(employeeModel);
             await _context.SaveChangesAsync();
 
-            return StatusCode(201);
+            return Ok(new { Message = "Employee Added Successfully" });
         }
 
         // DELETE: api/Employee/5
@@ -121,7 +122,25 @@ namespace IntranetPortal.Controllers
 
 
 
-            return employeeModel;
+            return Ok(new { Message = "Employee Deleted Successfully" });
+        }
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(Login employee)
+        {
+            var existingEmployee = await _context.EmployeesModel.FirstOrDefaultAsync(e => e.mail == employee.Email && e.password == employee.Password);
+
+            if (existingEmployee == null)
+            {
+                return BadRequest(new { message = "Invalid email or password" });
+            }
+            else if (existingEmployee.IsActive == false)
+            {
+                return BadRequest(new { message = "Your account is inactive. Please contact your administrator" });
+            }
+            else
+            {
+                return Ok(new { message = "Employee logged in successfully" });
+            }
         }
 
         private bool EmployeeModelExists(int id)

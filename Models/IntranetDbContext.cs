@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using IntranetPortal.Models;
+using Intranet_Portal.Models;
 
 namespace IntranetPortal.Models
 {
@@ -22,6 +23,9 @@ namespace IntranetPortal.Models
         public DbSet<NewsModel> NewsModels { get; set; }
 
         public DbSet<MotivationModel> Motivations { get; set; }
+        public DbSet<StriesModel> Stries { get; set; }
+
+        
 
         
 
