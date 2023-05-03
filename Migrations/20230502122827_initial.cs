@@ -15,13 +15,13 @@ namespace Intranet_Portal.Migrations
                 name: "Departments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DepartmentName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Departments", x => x.Id);
+                    table.PrimaryKey("PK_Departments", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -38,19 +38,33 @@ namespace Intranet_Portal.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Documents",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DocName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Documents", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "EmployeesModel",
                 columns: table => new
                 {
                     employeesID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     employeeName = table.Column<string>(type: "nvarchar(50)", nullable: false),
-                    occupation = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     mail = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     mobile = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    dob = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    dob = table.Column<DateTime>(type: "datetime2", nullable: false),
                     dateOfJoin = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     department = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     designation = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
                     imageName = table.Column<string>(type: "nvarchar(100)", nullable: true)
                 },
                 constraints: table =>
@@ -77,8 +91,7 @@ namespace Intranet_Portal.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Motivation = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DailyDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    Motivation = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -99,6 +112,20 @@ namespace Intranet_Portal.Migrations
                 {
                     table.PrimaryKey("PK_NewsModels", x => x.newsId);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Stories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    VedioName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    VedioSrc = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Stories", x => x.Id);
+                });
         }
 
         /// <inheritdoc />
@@ -111,6 +138,9 @@ namespace Intranet_Portal.Migrations
                 name: "Designations");
 
             migrationBuilder.DropTable(
+                name: "Documents");
+
+            migrationBuilder.DropTable(
                 name: "EmployeesModel");
 
             migrationBuilder.DropTable(
@@ -121,6 +151,9 @@ namespace Intranet_Portal.Migrations
 
             migrationBuilder.DropTable(
                 name: "NewsModels");
+
+            migrationBuilder.DropTable(
+                name: "Stories");
         }
     }
 }

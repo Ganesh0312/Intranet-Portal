@@ -23,7 +23,7 @@ namespace IntranetPortal.Models
         public DbSet<NewsModel> NewsModels { get; set; }
 
         public DbSet<MotivationModel> Motivations { get; set; }
-        public DbSet<StriesModel> Stries { get; set; }
+        public DbSet<StriesModel> Stories { get; set; }
 
         
 

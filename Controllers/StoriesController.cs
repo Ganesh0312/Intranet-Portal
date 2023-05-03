@@ -21,7 +21,7 @@ namespace Intranet_Portal.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<StriesModel>>> GetStories()
         {
-            return await _context.Stries.
+            return await _context.Stories.
                  Select(x => new StriesModel()
                  {
                      Id = x.Id,
@@ -37,7 +37,7 @@ namespace Intranet_Portal.Controllers
             try
             {
                 stori.VedioName = await SaveStories(stori.Vedio);
-                await _context.Stries.AddAsync(stori);
+                await _context.Stories.AddAsync(stori);
                 _context.SaveChanges();
                 return Ok(new { Massage = "Stories Added Succesfully" });
             }catch (Exception ex)

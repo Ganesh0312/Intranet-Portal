@@ -29,7 +29,7 @@ namespace Intranet_Portal.Controllers
             return await _context.Documents.
                 Select(x => new DocumentModel()
                 {
-                    DocID = x.DocID,
+                    ID = x.ID,
                     DocName = x.DocName,
                     DocSrc = String.Format("{0}://{1}{2}/Documents/{3}", Request.Scheme, Request.Host, Request.PathBase, x.DocName)
 
@@ -43,7 +43,7 @@ namespace Intranet_Portal.Controllers
             _context.Documents.Add(document);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetDocument), new { id = document.DocID }, document);
+            return CreatedAtAction(nameof(GetDocument), new { id = document.ID }, document);
         }
         [HttpDelete("{id}")]
         public async Task<ActionResult<DocumentModel>> DeleteDocument(int id)

@@ -33,7 +33,7 @@ namespace IntranetPortal.Controllers
             _context.Departments.Add(departmentModel);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetDepartments), new { id = departmentModel.Id }, departmentModel);
+            return CreatedAtAction(nameof(GetDepartments), new { id = departmentModel.ID }, departmentModel);
         }
 
         

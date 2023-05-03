@@ -124,6 +124,28 @@ namespace IntranetPortal.Controllers
 
             return Ok(new { Message = "Employee Deleted Successfully" });
         }
+       
+       [HttpGet("birthday")]
+        public ActionResult<List<EmployeeModel>> EmployeeBirthday()
+        {
+            var employees = _context.EmployeesModel.ToList();
+            var today = DateTime.Today;
+
+            var employeesWithBirthdayToday = employees.Where(e => e.dob.Month == today.Month && e.dob.Day == today.Day).ToList();
+
+            return employeesWithBirthdayToday;
+        }
+        /*[HttpGet("NewJoiner")]
+        public ActionResult<List<EmployeeModel>> EmployeeNewJoiner()
+        {
+            var employees = _context.EmployeesModel.ToList();
+            var today = DateTime.Today;
+
+            var employeesWithBirthdayToday = employees.Where(e => e.dateOfJoin ).ToList();
+
+            return employeesWithBirthdayToday;
+        }*/
+
         [HttpPost("login")]
         public async Task<IActionResult> Login(Login employee)
         {

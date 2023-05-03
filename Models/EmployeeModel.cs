@@ -14,7 +14,8 @@ namespace IntranetPortal.Models
         public string employeeName { get; set; }
         public string mail { get; set; }
         public string mobile { get; set; }
-        public string dob { get; set; } 
+        [Required(ErrorMessage = "Date of birth is required")]
+        public DateTime dob { get; set; } 
         public string dateOfJoin { get; set; }
         public string department { get; set; }
         public string designation { get; set; }
