@@ -9,14 +9,19 @@ namespace IntranetPortal.Models
     {
         [Key]
         public int employeesID { get; set; }
-
         [Column(TypeName ="nvarchar(50)")]
         public string employeeName { get; set; }
         public string mail { get; set; }
         public string mobile { get; set; }
+
         [Required(ErrorMessage = "Date of birth is required")]
-        public DateTime dob { get; set; } 
-        public string dateOfJoin { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime dob { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime dateOfJoin { get; set; }
         public string department { get; set; }
         public string designation { get; set; }
         public string password { get; set; }
@@ -30,5 +35,7 @@ namespace IntranetPortal.Models
 
         [NotMapped]
         public string? imageSrc { get; set; }
+
+
     }
 }

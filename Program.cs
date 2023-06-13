@@ -49,6 +49,12 @@ app.UseStaticFiles(new StaticFileOptions
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Strories")),
     RequestPath = "/Strories"
 });
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "EmpImage")),
+    RequestPath = "/EmpImage"
+});
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

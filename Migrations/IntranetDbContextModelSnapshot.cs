@@ -83,9 +83,8 @@ namespace Intranet_Portal.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<string>("dateOfJoin")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("dateOfJoin")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("department")
                         .IsRequired()
@@ -130,7 +129,10 @@ namespace Intranet_Portal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<string>("ImageName")
+                    b.Property<string>("Category")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Imagesrc")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
@@ -179,6 +181,115 @@ namespace Intranet_Portal.Migrations
                     b.ToTable("NewsModels");
                 });
 
+            modelBuilder.Entity("Intranet_Portal.Models.EscalationMatrix", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Topic")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EMatrix");
+                });
+
+            modelBuilder.Entity("Intranet_Portal.Models.Knowledge+DocumentHub", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<byte[]>("Content")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("FileType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("FolderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FolderId");
+
+                    b.ToTable("DocumentsHubs");
+                });
+
+            modelBuilder.Entity("Intranet_Portal.Models.Knowledge+Folder", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Folders");
+                });
+
+            modelBuilder.Entity("Intranet_Portal.Models.Option", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("OpinionPollId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OpinionPollId");
+
+                    b.ToTable("Options");
+                });
+
+            modelBuilder.Entity("Intranet_Portal.Models.PollModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Question")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Polls");
+                });
+
             modelBuilder.Entity("Intranet_Portal.Models.StriesModel", b =>
                 {
                     b.Property<int>("Id")
@@ -186,6 +297,14 @@ namespace Intranet_Portal.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Titale")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("VedioName")
                         .HasColumnType("nvarchar(max)");
@@ -196,6 +315,38 @@ namespace Intranet_Portal.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Stories");
+                });
+
+            modelBuilder.Entity("Intranet_Portal.Models.Knowledge+DocumentHub", b =>
+                {
+                    b.HasOne("Intranet_Portal.Models.Knowledge+Folder", "Folder")
+                        .WithMany("Documents")
+                        .HasForeignKey("FolderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Folder");
+                });
+
+            modelBuilder.Entity("Intranet_Portal.Models.Option", b =>
+                {
+                    b.HasOne("Intranet_Portal.Models.PollModel", "OpinionPoll")
+                        .WithMany("Options")
+                        .HasForeignKey("OpinionPollId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("OpinionPoll");
+                });
+
+            modelBuilder.Entity("Intranet_Portal.Models.Knowledge+Folder", b =>
+                {
+                    b.Navigation("Documents");
+                });
+
+            modelBuilder.Entity("Intranet_Portal.Models.PollModel", b =>
+                {
+                    b.Navigation("Options");
                 });
 #pragma warning restore 612, 618
         }

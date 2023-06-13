@@ -27,29 +27,63 @@ namespace IntranetPortal.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ImagesModel>>> GetImages()
         {
-          if (_context.Images == null)
-          {
-              return NotFound();
-          }
+            if (_context.Images == null)
+            {
+                return NotFound();
+            }
 
             return await _context.Images.
-                Select(x => new ImagesModel(){
+                Select(x => new ImagesModel()
+                {
                     ID = x.ID,
                     ImageName = x.ImageName,
                     Imagesrc = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, x.ImageName)
 
                 }).ToListAsync();
         }
-
-        
-       
-        [HttpPost]
-        public async Task<ActionResult<ImagesModel>> PostImagesModel([FromForm]ImagesModel imagesModel)
+        [HttpGet("get")]
+        public async Task<ActionResult<IEnumerable<ImagesModel>>> GetImages(string category)
         {
-          if (_context.Images == null)
-          {
-              return Problem("Entity set 'IntranetDbContext.Images'  is null.");
-          }
+            IQueryable<ImagesModel> query = _context.Images;
+
+            if (!string.IsNullOrEmpty(category))
+            {
+                query = query.Where(x => x.Category == category);
+            }              
+
+            var images = await query.Select(x => new ImagesModel()
+            {
+                ID = x.ID,
+                ImageName = x.ImageName,
+                Imagesrc = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, x.ImageName)
+            }).ToListAsync();
+
+            return images;
+        }
+        [HttpPost("post")]
+        public async Task<ActionResult<ImagesModel>> PostImagesModel([FromForm] ImagesModel imagesModel, string category)
+        {
+            if (_context.Images == null)
+            {
+                return Problem("Entity set 'IntranetDbContext.Images' is null.");
+            }
+
+            imagesModel.ImageName = await SaveImage(imagesModel.ImageFile);
+            imagesModel.Category = category; // Assign the category
+
+            _context.Images.Add(imagesModel);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetImages), new { category = imagesModel.Category }, imagesModel);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<ImagesModel>> PostImagesModel([FromForm] ImagesModel imagesModel)
+        {
+            if (_context.Images == null)
+            {
+                return Problem("Entity set Images is null.");
+            }
             imagesModel.ImageName = await SaveImage(imagesModel.ImageFile);
             _context.Images.Add(imagesModel);
             await _context.SaveChangesAsync();
