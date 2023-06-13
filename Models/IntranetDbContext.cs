@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using IntranetPortal.Models;
 using Intranet_Portal.Models;
-using System.Reflection.Metadata;
-using static Intranet_Portal.Models.Knowledge;
 
 namespace IntranetPortal.Models
 {
@@ -27,12 +25,9 @@ namespace IntranetPortal.Models
         public DbSet<MotivationModel> Motivations { get; set; }
         public DbSet<StriesModel> Stories { get; set; }
 
-        public DbSet<EscalationMatrix> EMatrix { get; set; }
-
-        public DbSet<DocumentHub> DocumentsHubs { get; set; }
-        public DbSet<Folder> Folders { get; set; }
-
-        public DbSet<PollModel> Polls { get; set; }
         
+
+        
+
     }
 }

@@ -7,8 +7,6 @@ namespace Intranet_Portal.Models
     {
         [Key]
         public int Id { get; set; }
-        public string Titale { get; set; }
-        public string Description { get; set; }
         [Required]
         [NotMapped]
         public IFormFile Vedio { get; set; }
