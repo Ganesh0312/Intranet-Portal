@@ -25,9 +25,12 @@ namespace IntranetPortal.Models
         public DbSet<MotivationModel> Motivations { get; set; }
         public DbSet<StriesModel> Stories { get; set; }
 
-        
+        public DbSet<KnowledgeHub> KnowledgeHubs { get; set; }
 
-        
+        public DbSet<Poll> polls { get; set; } 
 
+        public DbSet<Vote> Votes { get; set; }
+
+        //public DbSet<Option> Options { get; set; }
     }
 }

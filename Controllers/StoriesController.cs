@@ -25,6 +25,8 @@ namespace Intranet_Portal.Controllers
                  Select(x => new StriesModel()
                  {
                      Id = x.Id,
+                     Title = x.Title,
+                     Description= x.Description,
                      VedioName = x.VedioName,
                      VedioSrc = String.Format("{0}://{1}{2}/Strories/{3}", Request.Scheme, Request.Host, Request.PathBase, x.VedioName)
 

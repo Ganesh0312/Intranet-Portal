@@ -17,90 +17,45 @@ namespace IntranetPortal.Controllers
         private readonly IntranetDbContext _context;
         private readonly IWebHostEnvironment _hostEnvironment;
 
-        public ImagesController(IntranetDbContext context,IWebHostEnvironment hostEnvironment)
+        public ImagesController(IntranetDbContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
             _hostEnvironment = hostEnvironment;
         }
 
-        // GET: api/Images
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ImagesModel>>> GetImages()
+        public async Task<IEnumerable<ImagesModel>> GetImages()
         {
-          if (_context.Images == null)
-          {
-              return NotFound();
-          }
-
-            return await _context.Images.
-                Select(x => new ImagesModel(){
-                    ID = x.ID,
-                    ImageName = x.ImageName,
-                    Imagesrc = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, x.ImageName)
-
+            return await _context.Images
+                .Select(x => new ImagesModel(){
+                ID= x.ID,
+                ImageName=x.ImageName,
+                Imagesrc = String.Format("{0}://{1}{2}/Image/{3}", Request.Scheme, Request.Host, Request.PathBase, x.ImageName)
                 }).ToListAsync();
         }
 
-        
-       
         [HttpPost]
-        public async Task<ActionResult<ImagesModel>> PostImagesModel([FromForm]ImagesModel imagesModel)
+        public async Task<ActionResult<ImagesModel>> AddImages([FromForm] ImagesModel imagesmodel)
         {
-          if (_context.Images == null)
-          {
-              return Problem("Entity set 'IntranetDbContext.Images'  is null.");
-          }
-            imagesModel.ImageName = await SaveImage(imagesModel.ImageFile);
-            _context.Images.Add(imagesModel);
+            imagesmodel.ImageName = await SaveImage(imagesmodel.ImageFile);
+            _context.Images.Add(imagesmodel);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetImages), new { id = imagesModel.ID }, imagesModel);
-        }
+            return Ok(new { Message = "Images Added Completed" });
 
-        // DELETE: api/Images/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<ImagesModel>> DeleteImagesModel(int id)
-        {
-            if (_context.Images == null)
-            {
-                return NotFound();
-            }
-            var imagesModel = await _context.Images.FindAsync(id);
-            if (imagesModel == null)
-            {
-                return NotFound();
-            }
-            DeleteImage(imagesModel.ImageName);
-            _context.Images.Remove(imagesModel);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
 
         [NonAction]
         public async Task<string> SaveImage(IFormFile imageFile)
         {
             string imageName = new String(Path.GetFileNameWithoutExtension(imageFile.FileName).Take(10).ToArray()).Replace(' ', '-');
-            imageName = imageName + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(imageFile.FileName);
-            var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, "Images", imageName);
+            imageName = imageName + Path.GetExtension(imageFile.FileName);
+            var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, "Image", imageName);
             using (var fileStream = new FileStream(imagePath, FileMode.Create))
             {
                 await imageFile.CopyToAsync(fileStream);
             }
             return imageName;
         }
-         
-        private bool ImagesModelExists(int id)
-        {
-            return (_context.Images?.Any(e => e.ID == id)).GetValueOrDefault();
-        }
-
-        [NonAction]
-        public void DeleteImage(string imageName)
-        {
-            var imagePath = Path.Combine(_hostEnvironment.ContentRootPath, "Images", imageName);
-            if (System.IO.File.Exists(imagePath))
-                System.IO.File.Delete(imagePath);
-        }
     }
-}
+    }

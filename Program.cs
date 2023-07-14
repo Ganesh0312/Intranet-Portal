@@ -36,6 +36,11 @@ app.UseStaticFiles(new StaticFileOptions
 });
 app.UseStaticFiles(new StaticFileOptions
 {
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Image")),
+    RequestPath = "/Image"
+});
+app.UseStaticFiles(new StaticFileOptions
+{
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "NewsImage")),
     RequestPath = "/NewsImage"
 });
@@ -49,6 +54,13 @@ app.UseStaticFiles(new StaticFileOptions
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Strories")),
     RequestPath = "/Strories"
 });
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Knowledge")),
+    RequestPath = "/Knowledge"
+});
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

@@ -18,6 +18,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.14" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
@@ -25,6 +26,8 @@
   <ItemGroup>
     <Folder Include="Images\" />
     <Folder Include="Documents\" />
+    <Folder Include="Image\" />
+    <Folder Include="Knowledge\" />
     <Folder Include="Strories\" />
     <Folder Include="NewsImage\" />
   </ItemGroup>
