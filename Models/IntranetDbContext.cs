@@ -27,9 +27,13 @@ namespace IntranetPortal.Models
 
         public DbSet<KnowledgeHub> KnowledgeHubs { get; set; }
 
+
         public DbSet<Poll> polls { get; set; } 
 
         public DbSet<Vote> Votes { get; set; }
+
+        public DbSet<CourseLink> CourseLinks { get; set; }
+        
 
         //public DbSet<Option> Options { get; set; }
     }

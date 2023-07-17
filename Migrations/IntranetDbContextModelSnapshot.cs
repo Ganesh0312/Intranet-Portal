@@ -179,6 +179,23 @@ namespace Intranet_Portal.Migrations
                     b.ToTable("NewsModels");
                 });
 
+            modelBuilder.Entity("Intranet_Portal.Models.CourseLink", b =>
+                {
+                    b.Property<int>("videoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("videoId"));
+
+                    b.Property<string>("videoURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("videoId");
+
+                    b.ToTable("CourseLinks");
+                });
+
             modelBuilder.Entity("Intranet_Portal.Models.KnowledgeHub", b =>
                 {
                     b.Property<int>("ID")
@@ -187,15 +204,15 @@ namespace Intranet_Portal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("DocName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DocSrc")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FolderName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
