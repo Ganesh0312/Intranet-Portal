@@ -6,7 +6,6 @@ namespace Intranet_Portal.Models
     {
 
         public int ID { get; set; }
-
         public string Category { get; set; }
 
         [NotMapped]

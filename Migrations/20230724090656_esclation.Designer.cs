@@ -4,6 +4,7 @@ using IntranetPortal.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Intranet_Portal.Migrations
 {
     [DbContext(typeof(IntranetDbContext))]
-    partial class IntranetDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230724090656_esclation")]
+    partial class esclation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace Intranet_Portal.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("EmployeeModelEscalationMatrix", b =>
+                {
+                    b.Property<int>("EscalationMatrixId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ResponsibleEmployeesemployeesID")
+                        .HasColumnType("int");
+
+                    b.HasKey("EscalationMatrixId", "ResponsibleEmployeesemployeesID");
+
+                    b.HasIndex("ResponsibleEmployeesemployeesID");
+
+                    b.ToTable("EmployeeModelEscalationMatrix");
+                });
 
             modelBuilder.Entity("IntranetPortal.Models.DepartmentModel", b =>
                 {
@@ -83,8 +101,9 @@ namespace Intranet_Portal.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("dateOfJoin")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("dateOfJoin")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("department")
                         .IsRequired()
@@ -225,10 +244,6 @@ namespace Intranet_Portal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ResponsibleEmployees")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("TopicName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -338,6 +353,21 @@ namespace Intranet_Portal.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Votes");
+                });
+
+            modelBuilder.Entity("EmployeeModelEscalationMatrix", b =>
+                {
+                    b.HasOne("Intranet_Portal.Models.EscalationMatrix", null)
+                        .WithMany()
+                        .HasForeignKey("EscalationMatrixId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IntranetPortal.Models.EmployeeModel", null)
+                        .WithMany()
+                        .HasForeignKey("ResponsibleEmployeesemployeesID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -105,8 +105,8 @@ namespace Intranet_Portal.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DocName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DocSrc = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    DocName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DocSrc = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

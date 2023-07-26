@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-
 namespace IntranetPortal.Models
 {
     public class EmployeeModel
@@ -16,7 +15,7 @@ namespace IntranetPortal.Models
         public string mobile { get; set; }
         [Required(ErrorMessage = "Date of birth is required")]
         public DateTime dob { get; set; } 
-        public string dateOfJoin { get; set; }
+        public DateTime dateOfJoin { get; set; }
         public string department { get; set; }
         public string designation { get; set; }
         public string password { get; set; }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using IntranetPortal.Models;
 using Microsoft.Extensions.Hosting;
+using Azure.Core;
 
 namespace IntranetPortal.Controllers
 {
@@ -30,9 +31,12 @@ namespace IntranetPortal.Controllers
                 .Select(x => new ImagesModel(){
                 ID= x.ID,
                 ImageName=x.ImageName,
+                Category = x.Category,
                 Imagesrc = String.Format("{0}://{1}{2}/Image/{3}", Request.Scheme, Request.Host, Request.PathBase, x.ImageName)
                 }).ToListAsync();
         }
+
+
 
         [HttpPost]
         public async Task<ActionResult<ImagesModel>> AddImages([FromForm] ImagesModel imagesmodel)
@@ -57,5 +61,49 @@ namespace IntranetPortal.Controllers
             }
             return imageName;
         }
+
+        [HttpGet("GetImages")]
+        public async Task<IActionResult> GetImagesByCategory()
+        {
+            var imagesByCategory = await _context.Images
+                .GroupBy(x => x.Category)
+                .Select(group => new
+                {
+                    Category = group.Key,
+                    Images = group.Select(x => new ImagesModel
+                    {
+                        ID = x.ID,
+                        ImageName = x.ImageName,
+                        Category = x.Category,
+                        Imagesrc = String.Format("{0}://{1}{2}/Image/{3}", Request.Scheme, Request.Host, Request.PathBase, x.ImageName)
+                    })
+                })
+                .ToListAsync();
+
+            return Ok(imagesByCategory);
+        }
+
+        [HttpGet("{category}")]
+        public async Task<IActionResult> GetImagesByCategoryy(string category)
+        {
+            var imagesInCategory = await _context.Images
+                .Where(x => x.Category == category)
+                .Select(x => new ImagesModel
+                {
+                    ID = x.ID,
+                    ImageName = x.ImageName,
+                    Category = x.Category,
+                    Imagesrc = String.Format("{0}://{1}{2}/Image/{3}", Request.Scheme, Request.Host, Request.PathBase, x.ImageName)
+                })
+                .ToListAsync();
+
+            if (imagesInCategory.Count == 0)
+            {
+                return NotFound(); // Return a 404 Not Found response if no images are found in the specified category.
+            }
+
+            return Ok(imagesInCategory);
+        }
+
     }
-    }
+}

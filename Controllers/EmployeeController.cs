@@ -33,7 +33,7 @@ namespace IntranetPortal.Controllers
                     mobile = x.mobile,
                     dob = x.dob,
                     password = x.password,
-                    dateOfJoin = x.dateOfJoin,
+                    //dateOfJoin = x.dateOfJoin,
                     department = x.department,
                     IsActive =x.IsActive,
                     designation = x.designation,
@@ -126,22 +126,39 @@ namespace IntranetPortal.Controllers
         }
        
        [HttpGet("birthday")]
-        public ActionResult<List<EmployeeModel>> EmployeeBirthday()
+        public async Task<ActionResult<List<EmployeeModel>>> EmployeeBirthday()
         {
             var employees = _context.EmployeesModel.ToList();
             var today = DateTime.Today;
 
             var employeesWithBirthdayToday = employees.Where(e => e.dob.Month == today.Month && e.dob.Day == today.Day).ToList();
 
-            return employeesWithBirthdayToday;
+            return await _context.EmployeesModel
+            .Select(x => new EmployeeModel()
+                 {
+                       employeesID = x.employeesID,
+                       employeeName = x.employeeName,
+                       imageName = x.imageName,
+                       mail = x.mail,
+                       mobile = x.mobile,
+                       dob = x.dob,
+        //password = x.password,
+                        dateOfJoin = x.dateOfJoin,
+                        department = x.department,
+                         IsActive = x.IsActive,
+                        designation = x.designation,
+                        imageSrc = String.Format("{0}://{1}{2}/Images/{3}", Request.Scheme, Request.Host, Request.PathBase, x.imageName)
+                    })
+                    .ToListAsync();
         }
+
         /*[HttpGet("NewJoiner")]
         public ActionResult<List<EmployeeModel>> EmployeeNewJoiner()
         {
             var employees = _context.EmployeesModel.ToList();
             var today = DateTime.Today;
 
-            var employeesWithBirthdayToday = employees.Where(e => e.dateOfJoin ).ToList();
+            var employeesWithBirthdayToday = employees.Where(e => e.dateOfJoin).ToList();
 
             return employeesWithBirthdayToday;
         }*/
